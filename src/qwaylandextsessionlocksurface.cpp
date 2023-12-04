@@ -1,10 +1,10 @@
 #include "qwaylandextsessionlocksurface.h"
-#include "wayland-ext-session-lock-v1-client-protocol.h"
 #include "window.h"
 
 #include <QtWaylandClient/private/qwaylandshellsurface_p.h>
 #include <QtWaylandClient/private/qwaylandsurface_p.h>
 #include <QtWaylandClient/private/qwaylandwindow_p.h>
+#include <private/qwaylandscreen_p.h>
 
 namespace ExtSessionLockV1Qt {
 
@@ -24,8 +24,8 @@ QWaylandExtLockSurface::QWaylandExtLockSurface(QWaylandExtSessionLockManagerInte
               return;
           }
           m_isLocked = true;
-          init(manager->m_lock->get_lock_surface(window->waylandSurface()->object(),
-                                                 inteface->get_wl_output()));
+          init(manager->m_lock->get_lock_surface(window->wlSurface(),
+                                                 window->waylandScreen()->output()));
           connect(inteface, &Window::requestUnlock, this, [manager] {
               manager->m_lock->unlock_and_destroy();
           });
