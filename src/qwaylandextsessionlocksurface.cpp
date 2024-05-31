@@ -4,29 +4,31 @@
 #include <QtWaylandClient/private/qwaylandshellsurface_p.h>
 #include <QtWaylandClient/private/qwaylandsurface_p.h>
 #include <QtWaylandClient/private/qwaylandwindow_p.h>
-#include <private/qwaylandscreen_p.h>
+#include <QtWaylandClient/private/qwaylandscreen_p.h>
+#include <qpa/qwindowsysteminterface.h>
 
 namespace ExtSessionLockV1Qt {
 
 QWaylandExtLockSurface::QWaylandExtLockSurface(QWaylandExtSessionLockManagerIntegration *manager,
                                                QtWaylandClient::QWaylandWindow *window)
-  : QtWaylandClient::QWaylandShellSurface(window)
-  , QtWayland::ext_session_lock_surface_v1()
+  : QtWaylandClient::QWaylandShellSurface(window),
+    QtWayland::ext_session_lock_surface_v1()
 {
-    ExtSessionLockV1Qt::Window *inteface = Window::get(window->window());
-    Q_ASSERT(inteface);
+    ExtSessionLockV1Qt::Window *interface = Window::get(window->window());
+    window->waylandSurface()->commit();
+    Q_ASSERT(interface);
     connect(
       manager,
       &QWaylandExtSessionLockManagerIntegration::requestLock,
       this,
-      [window, manager, inteface, this] {
+      [window, manager, interface, this] {
           if (m_isLocked) {
               return;
           }
           m_isLocked = true;
           init(manager->m_lock->get_lock_surface(window->wlSurface(),
                                                  window->waylandScreen()->output()));
-          connect(inteface, &Window::requestUnlock, this, [manager] {
+          connect(interface, &Window::requestUnlock, this, [manager] {
               manager->m_lock->unlock_and_destroy();
           });
       },
@@ -50,7 +52,7 @@ QWaylandExtLockSurface::ext_session_lock_surface_v1_configure(uint32_t serial,
     if (!m_configured) {
         m_configured = true;
         window()->resizeFromApplyConfigure(m_peddingSize);
-        window()->handleExpose(QRect(QPoint(), m_peddingSize));
+        QWindowSystemInterface::handleExposeEvent(window()->window(), QRect(QPoint(), m_peddingSize));
     } else {
         window()->applyConfigureWhenPossible();
     }
@@ -61,4 +63,6 @@ QWaylandExtLockSurface::applyConfigure()
 {
     window()->resizeFromApplyConfigure(m_peddingSize);
 }
+
+
 }
