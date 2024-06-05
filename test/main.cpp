@@ -18,72 +18,62 @@
 
 using namespace ExtSessionLockV1Qt;
 
-QStringList
-enumsToStringList(QMetaEnum metaEnum)
-{
-    QStringList ret;
-    ret.reserve(metaEnum.keyCount());
-    for (int i = 0; i < metaEnum.keyCount(); ++i) {
-        ret.append(metaEnum.key(i));
-    }
-    return ret;
+QStringList enumsToStringList(QMetaEnum metaEnum) {
+  QStringList ret;
+  ret.reserve(metaEnum.keyCount());
+  for (int i = 0; i < metaEnum.keyCount(); ++i) {
+    ret.append(metaEnum.key(i));
+  }
+  return ret;
 }
 
-template<typename T>
-T
-stringToEnum(QMetaEnum metaEnum, const QString &str)
-{
-    T ret               = {};
-    const auto splitted = str.split(QLatin1Char('|'), Qt::SkipEmptyParts);
-    for (const auto &value : splitted) {
-        ret |= T(metaEnum.keyToValue(qPrintable(value)));
-    }
-    return ret;
+template <typename T> T stringToEnum(QMetaEnum metaEnum, const QString &str) {
+  T ret = {};
+  const auto splitted = str.split(QLatin1Char('|'), Qt::SkipEmptyParts);
+  for (const auto &value : splitted) {
+    ret |= T(metaEnum.keyToValue(qPrintable(value)));
+  }
+  return ret;
 }
 
-class BasicWindow : public QRasterWindow
-{
+class BasicWindow : public QRasterWindow {
 public:
-    explicit BasicWindow(QColor color)
-      : m_color(color)
-    {
-    }
+  explicit BasicWindow(QColor color) : m_color(color) {}
 
 private:
-    void paintEvent(QPaintEvent *) override
-    {
-        QPainter p(this);
-        p.fillRect(QRect(0, 0, width(), height()), m_color);
-    }
+  void paintEvent(QPaintEvent *) override {
+    QPainter p(this);
+    p.fillRect(QRect(0, 0, width(), height()), m_color);
+  }
 
 private:
-    QColor m_color;
+  QColor m_color;
 };
 
-int
-main(int argc, char **argv)
-{
-    Shell::useExtSessionLock();
+int main(int argc, char **argv) {
+  Shell::useExtSessionLock();
 
-    QGuiApplication app(argc, argv);
+  QGuiApplication app(argc, argv);
 
-    auto screens = QGuiApplication::screens();
-    int i        = 0;
-    for (auto screen : screens) {
-        QColor color = Qt::blue;
-        if (i % 2 == 0) {
-            color = Qt::darkYellow;
-        }
-        BasicWindow *window = new BasicWindow(color);
-        Window::registerWindowFromQtScreen(window, screen);
-        window->show();
-        i += 1;
+  auto screens = QGuiApplication::screens();
+  int i = 0;
+  for (auto screen : screens) {
+    QColor color = Qt::blue;
+    if (i % 2 == 0) {
+      color = Qt::darkYellow;
     }
-    QTimer::singleShot(2000, &app, [] {
-        Command::instance()->unLockScreen();
-        QGuiApplication::quit();
-    });
-    Command::instance()->LockScreen();
+    BasicWindow *window = new BasicWindow(color);
+    window->setGeometry(screen->geometry());
+    window->setScreen(screen);
+    Window::registerWindowFromQtScreen(window, screen);
+    window->show();
+    i += 1;
+  }
+  QTimer::singleShot(2000, &app, [] {
+    Command::instance()->unLockScreen();
+    QGuiApplication::quit();
+  });
+  Command::instance()->LockScreen();
 
-    return app.exec();
+  return app.exec();
 }

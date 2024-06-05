@@ -4,9 +4,8 @@
 #include <QObject>
 
 namespace ExtSessionLockV1Qt {
-class SESSIONLOCKQTINTERFACE_EXPORT Shell
-{
+class SESSIONLOCKQTINTERFACE_EXPORT Shell {
 public:
-    static void useExtSessionLock();
+  static void useExtSessionLock();
 };
-}
+} // namespace ExtSessionLockV1Qt

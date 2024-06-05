@@ -1,2 +1,57 @@
-.cache
-/build
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+
+**/cmake-build-debug
+**/CMakeCache.txt
+**/cmake_install.cmake
+**/install_manifest.txt
+**/CMakeFiles/
+**/CTestTestfile.cmake
+**/Makefile
+**/*.cbp
+**/CMakeScripts
+**/compile_commands.json
+
+
+
+## Local 
+
+build/**/*
+include/*
+lib/*
+bin/*
+
+
+.cache/**/*
+.qt/**/*
+CMakeCache.txt
+*.cmake
+SessionLockQtConfigVersion.cmake
+*autogen/**/*
+build/**/*
+libSessionLockQtInterface.so*
+qwayland-ext-session-lock-v1.cpp
+qwayland-ext-session-lock-v1.h
+sessionlock-test
+sessionlockqtinterface_export.h
+wayland-ext-session-lock-v1-client-protocol.h
+wayland-ext-session-lock-v1-protocol.c
+wayland-shell-integration/libext-session-lock-v1.so

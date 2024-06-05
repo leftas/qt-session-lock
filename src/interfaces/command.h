@@ -4,20 +4,19 @@
 #include <QObject>
 namespace ExtSessionLockV1Qt {
 
-class SESSIONLOCKQTINTERFACE_EXPORT Command : public QObject
-{
-    Q_OBJECT
+class SESSIONLOCKQTINTERFACE_EXPORT Command : public QObject {
+  Q_OBJECT
 public:
-    static Command *instance();
+  static Command *instance();
 
-    void unLockScreen();
-    void LockScreen();
+  void unlockScreen();
+  void lockScreen();
 
 signals:
-    void requestUnlock();
-    void requestLock();
+  void requestUnlock();
+  void requestLock();
 
 private:
-    explicit Command(QObject *parent = nullptr);
+  explicit Command(QObject *parent = nullptr);
 };
-}
+} // namespace ExtSessionLockV1Qt
