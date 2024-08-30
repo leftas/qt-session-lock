@@ -14,7 +14,7 @@ QWaylandExtSessionLockManagerIntegration::
           QWaylandExtSessionLockManagerIntegration>(1),
       m_lock(new QtWayland::ext_session_lock_v1()) {
   connect(Command::instance(), &Command::requestUnlock, this, [this] {
-    if (m_lock->isInitialized()) {
+    if (m_lock && m_lock->isInitialized()) {
       m_lock->unlock_and_destroy();
       // We are required to do round trip, so the compositor would be informed.
       QtWaylandClient::QWaylandIntegration::instance()

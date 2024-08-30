@@ -40,8 +40,6 @@ qt6_generate_wayland_protocol_client_sources(SessionLockQtInterface FILES
 )
 
 target_sources(SessionLockQtInterface PRIVATE
-    src/interfaces/window.h
-    src/interfaces/window.cpp
     src/interfaces/shell.h
     src/interfaces/shell.cpp
     src/interfaces/command.h
@@ -108,7 +106,6 @@ install(TARGETS ext-session-lock-v1
 
 set(HEADERS
     src/interfaces/shell.h
-    src/interfaces/window.h
     src/interfaces/command.h
     ${CMAKE_CURRENT_BINARY_DIR}/sessionlockqtinterface_export.h
 )

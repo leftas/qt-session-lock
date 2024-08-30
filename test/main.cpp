@@ -6,13 +6,13 @@
 
 #include "interfaces/command.h"
 #include "interfaces/shell.h"
-#include "interfaces/window.h"
 
 #include <QGuiApplication>
 #include <QPainter>
 #include <QRasterWindow>
 #include <QTimer>
 #include <QWindow>
+#include <QScreen>
 
 #include <QMetaEnum>
 
@@ -65,15 +65,14 @@ int main(int argc, char **argv) {
     BasicWindow *window = new BasicWindow(color);
     window->setGeometry(screen->geometry());
     window->setScreen(screen);
-    Window::registerWindowFromQtScreen(window, screen);
     window->show();
     i += 1;
   }
   QTimer::singleShot(2000, &app, [] {
-    Command::instance()->unLockScreen();
+    Command::instance()->unlockScreen();
     QGuiApplication::quit();
   });
-  Command::instance()->LockScreen();
+  Command::instance()->lockScreen();
 
   return app.exec();
 }
