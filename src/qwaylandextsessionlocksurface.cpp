@@ -47,6 +47,11 @@ void QWaylandExtLockSurface::ext_session_lock_surface_v1_configure(
   }
 }
 
+void QWaylandExtLockSurface::setXdgActivationToken(const QString& token)  {
+    (void)token;
+    return;
+}
+
 void QWaylandExtLockSurface::applyConfigure() {
   window()->resizeFromApplyConfigure(m_peddingSize);
 }

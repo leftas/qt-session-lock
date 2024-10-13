@@ -18,6 +18,7 @@ public:
 
   bool isExposed() const override { return m_configured; }
   void applyConfigure() override;
+  void setXdgActivationToken(const QString &token) override;
 
 private:
   void ext_session_lock_surface_v1_configure(uint32_t serial, uint32_t width,
