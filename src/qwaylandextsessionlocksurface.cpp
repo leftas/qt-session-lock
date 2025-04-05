@@ -40,8 +40,7 @@ void QWaylandExtLockSurface::ext_session_lock_surface_v1_configure(
   if (!m_configured) {
     m_configured = true;
     window()->resizeFromApplyConfigure(m_peddingSize);
-    QWindowSystemInterface::handleExposeEvent(window()->window(),
-                                              QRect(QPoint(), m_peddingSize));
+    window()->updateExposure();
   } else {
     window()->applyConfigureWhenPossible();
   }
